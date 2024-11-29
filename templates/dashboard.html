@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <style>
+        /* Cute Theme Styling */
+        body {
+            font-family: "Comic Sans MS", "Poppins", Arial, sans-serif;
+            background-color: #fef3f4;
+            color: #444444;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h3 {
+            color: #ff6f91;
+            font-family: "Pacifico", cursive;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: #ffd1dc;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff6f91 !important;
+            font-family: "Pacifico", cursive;
+        }
+
+        .navbar-nav .nav-link {
+            color: #444444 !important;
+            font-size: 1rem;
+            margin-left: 15px;
+            transition: color 0.3s ease, transform 0.2s;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #ff6f91 !important;
+            transform: scale(1.1);
+        }
+
+        .dashboard-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ffd1dc;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #444444;
+        }
+
+        .form-control, .form-select {
+            background-color: #fff5f6;
+            color: #444444;
+            border: 2px solid #ffd1dc;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #ff6f91;
+            outline: none;
+            box-shadow: 0 0 5px #ff6f91;
+        }
+
+        .btn-primary {
+            background-color: #ff6f91;
+            border: none;
+            font-size: 1rem;
+            padding: 10px 20px;
+            border-radius: 50px;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #ffa3b5;
+            transform: scale(1.05);
+        }
+
+        .alert {
+            border-radius: 15px;
+            text-align: center;
+            font-family: "Comic Sans MS", cursive;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 0;
+            background-color: #ffe4e6;
+            color: #444444;
+            font-size: 0.9rem;
+            border-top: 3px solid #ff6f91;
+        }
+
+        footer a {
+            color: #ff6f91;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #ffa3b5;
+        }
+
+        .cute-decor {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: -20px;
+        }
+
+        .cute-decor img {
+            width: 80px;
+            height: 80px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">🌸 Panic Attack Dashboard 🌸</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/agent">Agents</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container dashboard-container">
+    <h1>Welcome, {{ username }}! 🌟</h1>
+    <div class="cute-decor">
+    <img src="{{ url_for('static', filename='img1.png') }}" alt="Heart Emoji">
+    <img src="{{ url_for('static', filename='img3.png') }}" alt="Sparkles Emoji">
+    <img src="https://img.icons8.com/emoji/80/cat-emoji.png" alt="Cat Emoji">
+</div>
+
+    <!-- Success or Error Alert -->
+    {% if success_message %}
+    <div class="alert alert-success mt-4" role="alert">
+        🎉 {{ success_message }}
+    </div>
+    {% endif %}
+    {% if error_message %}
+    <div class="alert alert-danger mt-4" role="alert">
+        😢 {{ error_message }}
+    </div>
+    {% endif %}
+
+    <!-- Preferences Form -->
+    <form method="POST" class="p-4 mt-4">
+        <h3 class="mb-3">Panic Response Preferences</h3>
+        <div class="mb-4">
+            <label for="relaxation_method" class="form-label">Choose Your Relaxation</label>
+            <select name="relaxation_method" id="relaxation_method" class="form-select">
+                <option value="Music" {% if preferences and preferences['relaxation_method'] == 'Music' %}selected{% endif %}>Music</option>
+                <option value="Breathing Exercise" {% if preferences and preferences['relaxation_method'] == 'Breathing Exercise' %}selected{% endif %}>Breathing Exercise</option>
+                <option value="Alert Alarm" {% if preferences and preferences['relaxation_method'] == 'Alert Alarm' %}selected{% endif %}>Alert Alarm</option>
+            </select>
+        </div>
+
+        <h3 class="mb-3">Emergency Contact</h3>
+        <div class="mb-4">
+            <label for="emergency_contact" class="form-label">Add Your Emergency Contact</label>
+            <input type="text" name="emergency_contact" id="emergency_contact" class="form-control"
+                   value="{{ preferences['emergency_contact'] if preferences else '' }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Save Preferences</button>
+    </form>
+</div>
+
+<footer>
+    <p>Made with 💖 by HYB. <a href="/help">Help</a> | <a href="/contact">Contact</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
